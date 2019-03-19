@@ -1,0 +1,276 @@
+
+bin/flume-ng agent -c conf -f conf/flume_kafka.sh -n agent
+bin/flume-ng agent -c conf -f conf/os.sh -n agent
+sh readjson.sh
+
+bussinessRst| 业务结果
+channelCode| 渠道编码
+chargefee| 充值金额
+clientIp| 客户端 IP
+endReqTime|请求结束时间
+gateway_id|支付机构编码  ---移动端
+idType|中国移动用户标识类型
+interFacRst|接口结果
+logOutTime|日志输出时间
+orderId|订单号
+payPhoneNo|登录号码(支付手机号)  ---移动端
+phoneno|被充值手机号   ---移动端
+prodCnt|订单中的产品数量
+provinceCode|省份编码
+rateoperateid|优惠活动编码    ---移动端
+receiveNotifyTime|接到支付通知时间
+requestId|业务流水号
+resultTime|省 BOSS 充值处理时间
+retMsg|失败原因
+serverIp|接口服务器端口IP
+serverPort|接口服务器端口
+serviceName|接口服务名( 英文)
+shouldfee|应支付金额
+srcChannel|订单来源渠道编码
+startReqTime|请求开始时间
+sysId|平台编码
+
+
+    PC端                     移动端
+bussinessRst     bussinessRst|业务结果
+channelCode      channelCode |渠道编码
+chargefee       chargefee   |充值金额
+clientIp        clientIp    |客户端 IP
+                             gateway_id  |支付机构编码
+endReqTime  |请求结束时间
+idType      |中国移动用户标识类型
+interFacRst     interFacRst |接口结果
+logOutTime      logOutTime  |日志输出时间
+orderId         orderId     |订单号
+                        payPhoneNo  |登录号码(支付手机号)
+                        phoneno     |被充值手机号
+prodCnt     |订单中的产品数量
+provinceCode    provinceCode |省份编码
+                        rateoperateid |优惠活动编码
+                        receiveNotifyTime|接到支付通知时间
+requestId       requestId |业务流水号
+resultTime      resultTime|省 BOSS 充值处理时间
+retMsg          retMsg  |失败原因
+serverIp        serverIp |接口服务器端口IP
+serverPort      serverPort  |接口服务器端口
+serviceName     serviceName |接口服务名( 英文)
+shouldfee       shouldfee   |应支付金额
+startReqTime|请求开始时间
+srcChannel      srcChannel|订单来源渠道编码
+sysId           sysId   |平台编码
+
+移动支付带优惠活动[shouldfee, chargefee, rateoperateid*, orderId, sysId, provinceCode, bussinessRst, logOutTime, serverPort, serviceName, retMsg, gateway_id, phoneno, payPhoneNo, srcChannel, receiveNotifyTime*, interFacRst, requestId, clientIp, serverIp, channelCode]
+移动支付不带优惠活动[resultTime, chargefee, idType, orderId, sysId, provinceCode, bussinessRst, logOutTime, serverPort, serviceName, retMsg, gateway_id, phoneno, receiveNotifyTime, interFacRst, requestId, clientIp, serverIp, channelCode]
+PC支付[shouldfee, chargefee, idType, orderId, sysId, provinceCode, bussinessRst, logOutTime, serverPort, serviceName, retMsg, interFacRst, startReqTime, requestId, clientIp, serverIp, channelCode, endReqTime, prodCnt]
+
+01+渠道编码
+编码	平台名
+01	服务子系统
+02	统一接口平台
+03	支付网关
+04	统一支付平台
+05	支付基地
+06	订单平台
+07	PC 商城前端
+08	shopAPI
+09	手机营业厅
+10	统一认证
+11	微信
+12	支付宝
+13	财付通
+14	银联
+15	触屏
+16	流量直充平台
+
+1.6.2.	接口标识对照
+接口标识	服务名
+makeNewOrder	生成订单
+sendPayReq	支付请求
+sendPayReqForward	支付请求转发
+payNotifyReq	支付通知
+payNotifyReqForward	支付通知转发
+sendRechargeReq	充值请求
+reChargeNotifyReq	充值通知
+refundReq	退费请求
+refundNotifyRzeq	退费通知
+sendPointReq	积分支付
+pointRollBackReq	积分支付回退
+bankPayTypeReq	银行卡支付请求
+sendAllPayReq	支付宝支付请求
+sendWxPayReq	微信支付请求
+sendTenPayReq	财付通支付请求
+sendUniPayReq	银联支付请求
+
+
+1.6.3.	省份编码对照
+省份编码	区域名称
+100	北京
+200	广东
+210	上海
+220	天津
+230	重庆
+240	辽宁
+250	江苏
+270	湖北
+280	四川
+290	陕西
+311	河北
+351	山西
+371	河南
+431	吉林
+451	黑龙江
+471	内蒙古
+531	山东
+551	安徽
+571	浙江
+591	福建
+731	湖南
+771	广西
+791	江西
+851	贵州
+871	云南
+891	西藏
+898	海南
+931	甘肃
+951	宁夏
+971	青海
+991	新疆
+
+
+
+1.6.4.	渠道编码对照
+编码	渠道名称
+0702	PC
+6900	手机营业厅
+0703	能力开放平台
+0704	销售子系统
+0705	触屏版
+0706	商城互动中心
+
+
+1.6.5.	订单来源渠道编码对照
+状态值	状态名称
+00	服务子系统
+01	壹站
+11	客户端/APP
+20	销售子系统
+21	能力开放平台
+30	Wap 厅,
+40	统一门户
+41	交流平台
+42	Webtrends
+43	统一认证
+
+
+
+1.6.6.	支付银行编码对照
+银行编号	银行名称	银行编号	银行名称
+ICBC	工商银行	HSB	徽商银行
+CMB	招商银行	HUNRCU	湖南农村信用社
+CCB	建设银行	JJB	九江银行
+ABC	农业银行	JSB	江苏银行
+BOC	中国银行	NBB	宁波银行
+SPDB	上海浦东发展银行	NXB	宁夏银行
+BCOM	交通银行	QLB	齐鲁银行
+CMBC	民生银行	QSB	齐商银行
+CEBB	光大银行	RZB	日照银行
+GDB	广东发展银行	SCB	渣打银行
+ECITIC	中信银行	SDRCB	顺德农村商业银行
+HXB	华夏银行	BOS	上海银行
+CIB	兴业银行	SJB	上饶银行
+BBGB	广西北部湾银行	SZB	苏州银行
+BEA	东亚银行	SZRCB	深圳农村商业银行
+CBHB	渤海银行	TACCB	泰安市商业银行
+CDRCB	成都农村商业银行	WHCCB	威海市商业银行
+CQRCB	重庆农村商业银行	WLMQCB	乌鲁木齐市商业银行
+DGB	东莞银行	WZB	温州银行
+DLB	大连银行	XMB	厦门银行
+DYCCB	东营市商业银行	YCCCB	宜昌市商业银行
+FDB	富滇银行	ZHRCU	珠海市农村信用合作社
+GZB	广州银行	ZJCCB	浙商银行
+HBB	河北银行	ZJGRCB	张家港农商银行
+HKB	汉口银行	NCB	南洋商业银行
+HZB	杭州银行	SHRCB	上海农村商业银行
+LTCCB	浙江泰隆商业银行	CBHB	渤海银行
+HSB	徽商银行	NJCB	南京银行
+BJRCB	北京农商银行	BOB	北京银行
+
+
+
+1.6.7.	支付渠道编码对照
+渠道编号	支付渠道名称
+CMPAY	手机支付
+ALIPAY	支付宝
+
+1.6.8.	支付机构编码
+编号	名称
+CMPAY	手机支付
+ALIPAY	支付宝
+WXPAY	微信
+UNIPAY	银联
+TENPAY	财付通
+
+
+1.6.9.	支付方式类型编码对照
+编号	名称
+SHCCIDirectPay	信用卡
+SHDirectPayConfirm	APP 支付(）手机账号
+SHWAPDirectPayConfirm	WAP
+SHGWDirectPay	网银快捷支付(银行支付方式)
+SHCASDirectPayConfirm	客户端充值
+CMPAY	和包(手机支付)
+WXPAY	微信
+UNIPAY	银联
+TENPAY	财付通
+JFPAY	积分支付
+ALIPAY	支付宝
+
+
+1.6.10.	支付通道编码对照
+编号	名称
+WWW	表示 WWW 门户
+WAP	表示 WAP 门户
+APP	表示客户端应用
+TOUCH	触屏平台
+
+1.6.11.	用户类型编码对照
+类型编号	用户类型名称
+01	手机号码
+02	邮箱
+03	固话
+04	宽带
+
+
+1.6.12.	详单类型编码对照
+编码	详单类型
+01	套餐及固定费用详单
+02	通话详单
+03	短/彩信详单
+04	上网详单
+05	增值业务扣费记录
+06	代收费业务扣费记录
+07	其它费用扣费记录
+
+
+1.6.13.	业务编码对照
+此处业务列举不全，统一接口平台其他业务编码在后面继续扩充。
+业务编码	业务名称
+000001	充值缴费
+000002	实时话费查询
+000003	积分查询
+000004	积分记录查询
+000005	套餐余量查询
+000006	已订购业务查询
+000007	客户资料查询
+000008	交费记录查询
+000009	账单查询
+000010	详单查询
+000011	统一查询退订
+000012	业务办理
+000013	主套餐变更
+000014	充值卡充值
+000015	客户信息修改
+000016	应交费用查询
+000017	业务开通状态查询
+000018	4G 套餐多终端共享使用明细查询
+000019	4G 套餐多终端共享成员管理
