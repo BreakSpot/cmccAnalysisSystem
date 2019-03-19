@@ -1,0 +1,34 @@
+application.conf
+hbase.zookeeper.host="192.168.138.101:2181,192.168.138.102:2181,192.168.138.103:2181"
+hbase.table.name="dmp_02"
+
+ val load = ConfigFactory.load()
+    val hbaseTableName = load.getString("hbase.table.name")
+    val configuration = sc.hadoopConfiguration
+    configuration.set("hbase.zookeeper.quorum", load.getString("hbase.zookeeper.host"))
+    val hbConn = ConnectionFactory.createConnection(configuration)
+    val hbadmin = hbConn.getAdmin
+    if (!hbadmin.tableExists(TableName.valueOf(hbaseTableName))) {
+      println("HBASE Table Name Create")
+
+      val tableDescriptor = new HTableDescriptor(TableName.valueOf(hbaseTableName))
+      //创建列簇
+      val columnDescriptor = new HColumnDescriptor("tags")
+      //将列簇加入表中
+      tableDescriptor.addFamily(columnDescriptor)
+      hbadmin.createTable(tableDescriptor)
+      hbadmin.close()
+      hbConn.close()
+    }
+    //创建一个jobconf任务
+    val jobConf = new JobConf(configuration)
+    //指定key的输出类型
+    jobConf.setOutputFormat(classOf[TableOutputFormat])
+    //指定输出到那个表
+    jobConf.set(TableOutputFormat.OUTPUT_TABLE, hbaseTableName)
+    
+    RDD(val put = new Put(Bytes.toBytes(userid))    
+    put.addImmutable(
+            Bytes.toBytes("tags"), Bytes.toBytes(s"$day"),Bytes.toBytes(tags))
+    (new ImmutableBytesWritable(), put)
+    ).saveAsHadoopDataset(jobConf)

@@ -1,0 +1,4 @@
+val bootstrapServers = "hadoop01:9092,hadoop02:9092,hadoop03:9092"
+val topicsSet = Set(Constants.KAFKA_TOPICS)
+val kafkaParams = Map[String, String]("metadata.broker.list" -> bootstrapServers,"group.id" ->"kafkaGroup")
+val messages: InputDStream[(String, String)] = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topicsSet)

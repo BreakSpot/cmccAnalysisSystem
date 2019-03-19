@@ -1,0 +1,51 @@
+
+//从数据库中获取行偏移量
+val topicPartitionOffset = ScalalikeJdbcUtil.offsetCheck(topics)
+
+
+//最后加上维护
+stream.foreachRDD { rdd =>
+  val offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
+  rdd.foreachPartition { iter =>
+    val o = offsetRanges(TaskContext.get.partitionId)
+    ScalalikeJdbcUtil.updateOffset(o)
+  }
+}
+
+
+ScalalikeJdbcUtil类
+
+/**
+* 查看offset
+* @param topics
+* @return
+*/
+def offsetCheck(topics: Array[String]): mutable.Map[TopicPartition, Long] ={
+DBs.setup()
+val res = DB.readOnly { implicit session =>
+  val offsets = mutable.HashMap[TopicPartition, Long]()
+  for(topic <- topics){
+    SQL("select partition, offset from offset_check where topic=?")
+      .bind(topic)
+      .map(rs =>{
+        val partition = rs.string("partition").toInt
+        val offset = rs.string("offset").toLong
+        offsets.put(new TopicPartition(topic, partition), offset)
+      }).list().apply()
+  }
+  offsets
+}
+res
+}
+
+/**
+* 维护offset
+* @param it
+*/
+def updateOffset(it: OffsetRange): Unit ={
+DBs.setup()
+DB.autoCommit { implicit session =>
+  SQL("replace into offset_check set topic=?, partition=?, offset=?")
+    .bind(it.topic, it.partition, it.untilOffset).update().apply()
+}
+}

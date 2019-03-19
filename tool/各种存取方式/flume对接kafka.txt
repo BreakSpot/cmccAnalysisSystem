@@ -1,0 +1,43 @@
+#任务：将/root/log/cmcc.json中的数据每秒十条传入kafka
+
+#1.定时的写入flume的监控日志/root/log/cmcc.log
+    #编写脚本，1秒读入10条
+    for line in `cat /root/log/cmcc.json`
+    do
+      `echo $line >> /root/log/cmcc.log`
+      sleep 0.1s
+    done
+    
+#2.编写flume脚本
+    agent.sources = s1                                                                                                                  
+    agent.channels = c1                                                                                                                 
+    agent.sinks = k1 
+    agent.sources.s1.type=exec                                                                                                          
+    agent.sources.s1.command=tail -F /root/log/cmcc.log                                                                           
+    agent.sources.s1.channels=c1                                                                                                        
+    agent.channels.c1.type=memory                                                                                                       
+    agent.channels.c1.capacity=10000                                                                                                    
+    agent.channels.c1.transactionCapacity=100 
+    #设置一个kafka接收器
+    agent.sinks.k1.type= org.apache.flume.sink.kafka.KafkaSink
+    #设置kafka的broker地址和端口号(所有的)
+    agent.sinks.k1.brokerList=hadoop01:9092,hadoop02:9092,hadoop03:9092
+    #设置kafka的topic
+    agent.sinks.k1.topic=cmcc2
+    #设置一个序列化方式
+    agent.sinks.k1.serializer.class=kafka.serializer.StringEncoder
+    #组装
+    agent.sinks.k1.channel=c1
+
+#3.启动kafka
+    #启动kafka：
+        nohup bin/kafka-server-start.sh  config/server.properties &
+    #查看kafka的topic列表：
+        bin/kafka-topics.sh --list --zookeeper hadoop02:2181
+    #查看topic中的数据：
+        bin/kafka-console-consumer.sh --zookeeper hadoop02:2181 --from-beginning --topic cmcc
+
+#4.执行flume脚本
+    bin/flume-ng agent -c conf -f conf/flume_kafka.sh -n agent -Dflume.root.logger=INFO,console
+
+

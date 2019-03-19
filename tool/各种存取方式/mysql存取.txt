@@ -1,0 +1,14 @@
+application.conf
+jdbc.url="jdbc:mysql://loaclhost:3306/dmp?characterEncoding=utf-8"
+jdbc.tableName="tableName"
+jdbc.user="root"
+jdbc.password="123"
+
+//存储到mysql中
+val load = ConfigFactory.load()
+val prop = new Properties()
+props.setProperty("user", load.getString("jdbc.user"))
+props.setProperty("password", load.getString("jdbc.password"))
+
+res.write.mode(SaveMode.Append)
+    .jdbc(load.getString("jdbc.url"), load.getString("jdbc.tableName"),props)
